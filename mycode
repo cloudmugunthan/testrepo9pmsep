@@ -1,0 +1,24 @@
+- hosts: all
+  remote_user: ec2-user
+  become: yes
+  tasks:
+      - name: Installing Jenkins on greens machine
+        yum_repository:
+            name: jenkins
+            description: Installing jenkins using repo
+            baseurl: http://pkg.jenkins.io/redhat
+            gpgkey: http://pkg.jenkins.io/redhat/jenkins.io.key
+
+      - name: Install Java and Jenkins
+        yum:
+          name: "{{ item }}"
+          state: present
+        loop:
+          - java
+          - jenkins
+
+      - name: Start Jenkins
+        service:
+          name: jenkins
+          state: started
+
